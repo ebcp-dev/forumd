@@ -7,7 +7,8 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"nodemon server.js\" \"node start-client.js\""
+    "start": "concurrently \"nodemon server.js\" \"node start-client.js\"",
+    "server": "node server.js"
   },
   "author": "Earl Perez",
   "license": "MIT",

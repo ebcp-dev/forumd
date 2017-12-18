@@ -2,6 +2,9 @@
   "name": "forumd",
   "version": "1.0.0",
   "description": "An online forum API created with Node.js/Express and MongoDB.",
+  "engines": {
+    "node": "*"
+  },
   "main": "server.js",
   "scripts": {
     "start": "concurrently \"nodemon server.js\" \"node start-client.js\""

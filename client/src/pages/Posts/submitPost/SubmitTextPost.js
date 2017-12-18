@@ -20,6 +20,11 @@ class SubmitTextPost extends Component {
     submitFormOnClick(e) {
         e.preventDefault();
         const { title, text } = this.state;
+        if (!text) {
+            return this.setState({ 
+                success: false
+            });
+        }
         
         axios.post('/api/submitPost', { title, text })
         .then(response => {
@@ -54,6 +59,12 @@ class SubmitTextPost extends Component {
                 <h4 className="card-title">Submit Text</h4>
                 {this.state.authenticated === false && (
                 <p className="red-text">You must be logged in to make a post.</p>
+                )}
+                {!this.state.title && (
+                <p className="red-text">Title required.</p>
+                )}
+                {!this.state.text && (
+                <p className="red-text">Text required.</p>
                 )}
                 <form onSubmit={this.submitFormOnClick}>
                     <div className="md-form">

@@ -15,12 +15,10 @@ const postSchema = new Schema({
         required: true
     },
     link: {
-        type: String,
-        required: true
+        type: String
     },
     text: {
-        type: String,
-        required: true
+        type: String
     },
     isDeleted: {
         type: Boolean,

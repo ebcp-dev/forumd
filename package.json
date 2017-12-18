@@ -12,7 +12,7 @@
   "author": "Earl Perez",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "*",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.1",
     "connect-flash": "^0.1.1",

@@ -62,7 +62,7 @@ class Routes extends Component {
                           </a>
                         </li>
                       )}
-                      {this.state.user && (
+                      {!this.state.user && (
                         <li className="nav-item">
                           <a href="/register" className="nav-link"
                           data-toggle="modal" data-target="#registerModal">

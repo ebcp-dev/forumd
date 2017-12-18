@@ -126,7 +126,10 @@ class ViewPost extends Component {
                 <h4 className="card-title">{this.state.post.title}</h4>
                 <p className="card-text">{this.state.post._author.username}</p>
                 <p className="card-text">{this.parseDate(this.state.post.createdAt).elapsed}</p>
-                <p className="card-text">{this.state.post.link}</p>
+                {this.state.post.link
+                ? <p className="card-text">{this.state.post.link}</p>
+                : <p className="card-text">{this.state.post.text}</p>
+                }
             </div>
           </div>
           <hr />

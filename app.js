@@ -14,8 +14,8 @@ const router = require('./routes/router');
 
 const app = express();
 // Database url
-const db = 'mongodb://forumdadmin:forumdadminpass@ds159926.mlab.com:59926/heroku_mzdrsqp3'
-//const db = 'mongodb://localhost:27017/forumd'
+//const db = 'mongodb://forumdadmin:forumdadminpass@ds159926.mlab.com:59926/heroku_mzdrsqp3'
+const db = 'mongodb://localhost:27017/forumd'
 
 mongoose.connect(db, { useMongoClient: true }, () => {
     console.log('Connected to MongoDB.');

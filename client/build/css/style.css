@@ -1,0 +1,53 @@
+main {
+    padding-bottom: 2rem;
+    margin-top: 4rem;
+}
+
+.extra-margins {
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.jumbotron {
+    text-align: center;
+}
+
+.card {
+    border-radius: 0;
+}
+
+footer.page-footer {
+    background-color: #222;
+    margin-top: 2rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background: #212121;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    background: #666;
+}
+
+a {
+    color: #555;
+}
+
+a:hover {
+    color: #AAA;
+}

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import './Login.css';
+import './Register.css';
 import axios from 'axios';
 
-class Login extends Component {
+class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username: '',
             password: '',
+            email: '',
+            name: '',
             success: null,
             response: null
         }
@@ -17,16 +19,16 @@ class Login extends Component {
 
     submitFormOnClick(e) {
         e.preventDefault();
-        const { username, password } = this.state;
+        const { username, password, email, name } = this.state;
         
-        axios.post('/api/login', { username, password })
+        axios.post('/api/register', { username, password, email, name })
         .then(response => {
             this.setState({ success: true });
             console.log(response);
             window.location.reload();
         }).catch(error => {
-            this.setState({ success: false, response: "Invalid credentials." });
-        })
+            this.setState({ success: false, response: error.response.data });
+        });
     }
 
     handleChange(e) {
@@ -36,20 +38,20 @@ class Login extends Component {
     }
 
     render () {
-        const { username, password } = this.state;
+        const { username, password, email, name } = this.state;
         return (
-            <div className="modal fade" id="loginModal" tabIndex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+            <div className="modal fade" id="registerModal" tabIndex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="loginModal">Login</h5>
+                            <h5 className="modal-title" id="registerModal">Register</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         {this.state.success === false && (
                             <div className="modal-body">
-                                <p className="red-text">{this.state.response}</p>
+                                <p className="red-text">{this.state.response.message}</p>
                             </div>
                         )}
                         <form onSubmit={this.submitFormOnClick}>
@@ -66,6 +68,18 @@ class Login extends Component {
                                     value={password} onChange={this.handleChange}/>
                                     <label htmlFor="password-form">Password</label>
                                 </div>
+                                <div className="md-form">
+                                    <input type="text" id="email-form" 
+                                    className="form-control" name="email"
+                                    value={email} onChange={this.handleChange}/>
+                                    <label htmlFor="email-form">Email</label>
+                                </div>
+                                <div className="md-form">
+                                    <input type="text" id="name-form" 
+                                    className="form-control" name="name"
+                                    value={name} onChange={this.handleChange}/>
+                                    <label htmlFor="name-form">Name</label>
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <div className="flex-row">
@@ -80,4 +94,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default Register;

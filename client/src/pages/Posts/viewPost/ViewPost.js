@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './ViewPost.css';
 
-import SubmitComment from './../comments/submitComment';
-import DeleteComment from './../comments/deleteComments';
+import SubmitComment from './comments/submitComment';
+import DeleteComment from './comments/deleteComments';
 
 class ViewPost extends Component {
 
@@ -61,10 +61,44 @@ class ViewPost extends Component {
     });
   }
 
-  parseDate(date) {
+  parseDate(parseDate) {
     //since we are getting a UTC date
-    return new Date(date).toString();
-  }
+    const msecPerMinute = 1000 * 60;  
+    const msecPerHour = msecPerMinute * 60;  
+    const msecPerDay = msecPerHour * 24;  
+
+    const date = new Date(parseDate);
+    const current = new Date();
+
+    let interval = current.getTime() - date.getTime();
+    let days = Math.floor(interval / msecPerDay );
+    //interval = interval - (days * msecPerDay );
+    let hours = Math.floor(interval / msecPerHour );
+    //interval = interval - (hours * msecPerHour );
+    let minutes = Math.floor(interval / msecPerMinute );
+    //interval = interval - (minutes * msecPerMinute );
+    let seconds = Math.floor(interval / 1000 );
+    let elapsed;
+    if (interval > 1000) {
+        elapsed = `${seconds} second(s) ago.`;
+    }
+    if (seconds > 60) {
+        elapsed = `${minutes} minute(s) ago.`;
+    }
+    if (minutes > 60) {
+        elapsed = `${hours} hour(s) ago.`;
+    }
+    if (hours > 24) {
+        elapsed = `${days} day(s) ago.`;
+    }
+    let parsedDate = {
+        month: date.getMonth()+1,
+        date: date.getDate(),
+        year: date.getFullYear(),
+        elapsed
+    };
+    return parsedDate;
+}
 
   handleUpvote(e) {
     e.preventDefault();
@@ -88,11 +122,10 @@ class ViewPost extends Component {
       return (
         <div className="Post">
           <div className="card">
-            <img className="img-fluid" src="/img/darkstockphoto.jpg" alt="Post"/>
             <div className="card-body">
                 <h4 className="card-title">{this.state.post.title}</h4>
                 <p className="card-text">{this.state.post._author.username}</p>
-                <p className="card-text">{this.parseDate(this.state.post.createdAt)}</p>
+                <p className="card-text">{this.parseDate(this.state.post.createdAt).elapsed}</p>
                 <p className="card-text">{this.state.post.link}</p>
             </div>
           </div>
@@ -101,16 +134,21 @@ class ViewPost extends Component {
               isAuthenticated={this.state.isAuthenticated}
               url={this.props.location.pathname} 
               postId={this.props.match.params.shortId} />
-          {this.state.post._comments && this.state.post._comments.reverse().map(comment => ([
-            <div key={comment.shortId} className="card card-body">
-                <p className="card-text">{comment.text}</p>
-                <p className="card-text">{comment._author.username}</p>
-                <p className="card-text">{this.parseDate(comment.createdAt)}</p>
-                {this.state.isAuthenticated && this.state.user.username === comment._author.username && (
-                  <DeleteComment shortId={comment.shortId} />
-                )}
-            </div>
-          ]))}
+          {this.state.post._comments && this.state.post._comments.reverse().map(comment => (
+          <div key={comment.shortId} className="card card-body">
+              <p className="card-text">{comment.text}</p>
+              <p className="card-text">{comment._author.username}</p>
+              <p className="card-text">
+                  {this.parseDate(comment.createdAt).elapsed}
+              </p>
+              <p className="card-text">
+                  {comment.shortId}
+              </p>
+              {this.state.isAuthenticated && this.state.user.username === comment._author.username && (
+              <DeleteComment shortId={comment.shortId} />
+              )}
+          </div>
+          ))}
         </div>
       );
     }

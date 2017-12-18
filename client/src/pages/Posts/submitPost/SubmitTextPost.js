@@ -9,7 +9,9 @@ class SubmitTextPost extends Component {
         this.state = {
             title: '',
             text: '',
-            success: false
+            success: null,
+            response: null,
+            authenticated: null
         }
         this.submitFormOnClick = this.submitFormOnClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -21,8 +23,20 @@ class SubmitTextPost extends Component {
         
         axios.post('/api/submitPost', { title, text })
         .then(response => {
-            this.setState({ success: true });
             console.log(response);
+            if (response.data.authenticated === false) {
+                this.setState({ 
+                    success: false,
+                    authenticated: false });
+            } else {
+                this.setState({ 
+                    success: true,
+                    authenticated: true });
+                    window.location.reload();
+            }
+        }).catch(error => {
+            console.log(error.response);
+            this.setState({ success: true, response: error.response.message });
         });
     }
 
@@ -37,7 +51,10 @@ class SubmitTextPost extends Component {
         const { title, link, text } = this.state;
         return (
             <div className="card card-body">
-                <h4 className="card-title">Submit Text Form</h4>
+                <h4 className="card-title">Submit Text</h4>
+                {this.state.authenticated === false && (
+                <p className="red-text">You must be logged in to make a post.</p>
+                )}
                 <form onSubmit={this.submitFormOnClick}>
                     <div className="md-form">
                         <input type="text" id="title-form" 

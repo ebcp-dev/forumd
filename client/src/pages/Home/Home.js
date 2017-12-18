@@ -18,19 +18,45 @@ class Home extends Component {
         </div>
         <hr className="extra-margins"/>
         <div className="row">
+
           <div className="col-lg-4">
             <div className="animated card fadeIn">
-            <img className="img-fluid" src="/img/darkstockphoto.jpg" alt="Front page"/>
               <div className="card-body">
                 <h4 className="card-title">Top posts</h4>
-                <p className="card-text">See the top trending posts of the day.</p>
+                <p className="card-text">Top trending posts of the day.</p>
+                <Link to='/posts'>
+                    <button type="button" className="btn btn-elegant">Open</button>
+                </Link>
+              </div>
+            </div>
+            <br/>
+          </div>
+          <div className="col-lg-4">
+            <div className="animated card fadeIn">
+              <div className="card-body">
+                <h4 className="card-title">Profile</h4>
+                <p className="card-text">See and edit profile settings.</p>
+                <Link to='/posts'>
+                    <button type="button" className="btn btn-elegant">Open</button>
+                </Link>
+              </div>
+            </div>
+            <br/>
+          </div>
+          <div className="col-lg-4">
+            <div className="animated card fadeIn">
+              <div className="card-body">
+                <h4 className="card-title">Favorites</h4>
+                <p className="card-text">See your favorited content.</p>
                 <Link to='/posts'>
                     <button type="button" className="btn btn-elegant">Open</button>
                 </Link>
               </div>
             </div>
           </div>
+
         </div>
+        <hr className="extra-margins"/>
       </div>
     );
   }

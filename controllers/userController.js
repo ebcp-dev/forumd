@@ -36,7 +36,7 @@ userController.getAll = (req, res) => {
 // Registers new user
 userController.createNewUser = (req, res) => {
     const { username, password, email, name } = req.body;
-    
+    console.log(req.body)
     const newUser = new models.User({
         username,
         password,
@@ -90,6 +90,7 @@ userController.updateUser = (req, res) => {
             data: updatedUser
         });
     }).catch((error) => {
+        console.log(error)
         if (error.errors.username) {
             return res.status(500).json({
                 message: error.errors.username.message

@@ -4,9 +4,8 @@ import axios from 'axios';
 
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
 import Posts from './pages/Posts/postsPage/Posts';
-import SubmitTextPost from './pages/Posts/submitPost/SubmitTextPost';
-import SubmitLinkPost from './pages/Posts/submitPost/SubmitLinkPost';
 
 class Routes extends Component {
   constructor(props) {
@@ -24,7 +23,7 @@ class Routes extends Component {
 
   isAuthenticated() {
     axios.get('/api/user').then((response) => {
-      console.log(response)
+      //console.log(response)
       if (response.data.user) {
         this.setState({
           isAuthenticated: true,
@@ -56,23 +55,49 @@ class Routes extends Component {
                       <li className="nav-item">
                         <a href="/posts" className="nav-link">Posts</a>
                       </li>
+                      {this.state.user && (
+                        <li className="nav-item">
+                          <a href="#" className="nav-link">
+                            {this.state.user.username}
+                          </a>
+                        </li>
+                      )}
                       <li className="nav-item">
-                        {this.state.user
-                          ? <a onClick={this.logout} className="nav-link">Logout</a>
-                          : <a href="/login" className="nav-link">Login</a>
-                        }
+                        <a href="/register" className="nav-link"
+                        data-toggle="modal" data-target="#registerModal">
+                          Register
+                        </a>
                       </li>
+                      {this.state.user
+                        ? 
+                        <li className="nav-item">
+                          <a onClick={this.logout} href="/logout" className="nav-link">
+                            Logout
+                          </a>
+                        </li>
+                        : <div>
+                            <li className="nav-item">
+                              <a href="/login" className="nav-link"
+                              data-toggle="modal" data-target="#loginModal">
+                                Login
+                              </a>
+                            </li>
+                          </div>
+                      }
                   </ul>
               </div>
           </nav>
+          <Login />
+          <Register />
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/posts" render={(props) => (
               <Posts {...props} update={true} />
             )}/>
-            <Route exact path="/submitTextPost" component={SubmitTextPost}/>
-            <Route exact path="/submitLinkPost" component={SubmitLinkPost}/>
             <Route exact path="/login" component={Login}/>
+            <Route exact path="/logout" render={() => (
+                <Redirect to="/" />
+            )}/>
             <Route path="*" render={(props) => (
               <div className="container"><h1>404 Page Not Found</h1></div>
             )}/>

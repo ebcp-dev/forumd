@@ -13,7 +13,7 @@ ensureAuthenticated = (req, res, next) => {
         //res.json(req.user);
         return next();
     } else {
-        console.log('Must be authenticated first.')
+        //console.log('Not authenticated.')
         res.json({
             authenticated: false
         });

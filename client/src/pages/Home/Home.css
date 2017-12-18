@@ -1,3 +1,7 @@
 .jumbotron {
     margin-top: 4rem;
 }
+
+.card {
+    text-align: center;
+}

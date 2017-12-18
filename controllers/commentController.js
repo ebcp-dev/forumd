@@ -128,11 +128,11 @@ commentController.deleteComment = (req, res) => {
         {
             new: true
         }
-    ).then((deleted) => {
-        console.log(deleted);
+    ).then((result) => {
+        console.log(result);
         return res.status(200).json({
             success: true,
-            data: deleted,
+            data: result,
             message: 'Comment deleted.'
         });
     }).catch((error) => {

@@ -16,13 +16,14 @@ class DeleteComment extends Component {
         axios.post(`/api/deleteComment`, commentId)
         .then(response => {
             console.log(response);
-        });
+        }).catch(error => {
+            console.log(error.response);
+        })
 
-        window.location.reload();
+        //window.location.reload();
     }
 
     render () {
-        //console.log(`authenticated: ${this.props.isAuthenticated}`)
         return (
             <div>
                 <form onSubmit={this.submitFormOnClick}>

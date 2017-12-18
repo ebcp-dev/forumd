@@ -20,9 +20,7 @@ mongoose.connect(db, { useMongoClient: true }, () => {
 });
 
 // Express only serves static assets in production
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static("client/build"));
-}
+app.use(express.static(path.resolve(__dirname, 'client/build')));
 
 // Use Middleware
 app.use(bodyParser.json());

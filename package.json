@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "An online forum API created with Node.js/Express and MongoDB.",
   "engines": {
-    "node": "6.11.0"
+    "node": "8.9.3"
   },
   "main": "server.js",
   "scripts": {

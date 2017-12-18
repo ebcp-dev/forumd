@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash')
 const session = require('express-session');
+const path = require('path');
 // Passport for authentication
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;

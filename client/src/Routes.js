@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Posts from './pages/Posts/postsPage/Posts';
+import Profile from './pages/Profile/Profile';
 
 class Routes extends Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class Routes extends Component {
                       </li>
                       {this.state.user && (
                         <li className="nav-item">
-                          <a href="#" className="nav-link">
+                          <a href="/profile" className="nav-link">
                             {this.state.user.username}
                           </a>
                         </li>
@@ -93,6 +94,13 @@ class Routes extends Component {
           <Register />
           <Switch>
             <Route exact path="/" component={Home}/>
+            <Route exact path="/profile" render={(props) => (
+              this.state.user ? (
+                <Profile user={this.state.user} {...props} />
+              ) : (
+                <Redirect to="/" />
+              )
+            )}/>
             <Route path="/posts" render={(props) => (
               <Posts {...props} update={true} />
             )}/>

@@ -20,6 +20,12 @@ class Register extends Component {
     submitFormOnClick(e) {
         e.preventDefault();
         const { username, password, email, name } = this.state;
+        if (!username || !password || !email || !name) {
+            return this.setState({ 
+                success: false,
+                response: 'Please complete the form.'
+            });
+        }
         
         axios.post('/api/register', { username, password, email, name })
         .then(response => {
@@ -27,7 +33,7 @@ class Register extends Component {
             console.log(response);
             window.location.reload();
         }).catch(error => {
-            this.setState({ success: false, response: error.response.data });
+            this.setState({ success: false, response: error.response.data.message });
         });
     }
 
@@ -51,7 +57,7 @@ class Register extends Component {
                         </div>
                         {this.state.success === false && (
                             <div className="modal-body">
-                                <p className="red-text">{this.state.response.message}</p>
+                                <p className="red-text">{this.state.response}</p>
                             </div>
                         )}
                         <form onSubmit={this.submitFormOnClick}>

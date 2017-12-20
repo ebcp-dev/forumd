@@ -36,13 +36,14 @@ class Home extends Component {
               <div className="card-body">
                 <h4 className="card-title">Profile</h4>
                 <p className="card-text">See and edit profile settings.</p>
-                <Link to='/posts'>
+                <Link to='/profile'>
                     <button type="button" className="btn btn-elegant">Open</button>
                 </Link>
               </div>
             </div>
             <br/>
           </div>
+          {/*}
           <div className="col-lg-4">
             <div className="animated card fadeIn">
               <div className="card-body">
@@ -54,6 +55,7 @@ class Home extends Component {
               </div>
             </div>
           </div>
+          {*/}
 
         </div>
         <hr className="extra-margins"/>

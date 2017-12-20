@@ -7,7 +7,7 @@ const userController = {};
 
 /* GET methods */
 
-// Test API access
+// Get specific user
 userController.get = (req, res) => {
     res.json({
         user: req.user
@@ -68,40 +68,53 @@ userController.createNewUser = (req, res) => {
 // Update user details
 userController.updateUser = (req, res) => {
     const userId = req.user._id;
-    const { username, email, name } = req.body;
-    let password = bcrypt.hashSync(req.body.password, 10);
-
-    models.User.findByIdAndUpdate(
-        userId,
-        {
-            $set: {
-                username,
-                email,
-                name,
-                password
+    const { username, email, name, curPassword } = req.body;
+    console.log(req.body)
+    models.User.findById(userId, (err, user) => {
+        console.log(`Updating ${user.username}`);
+        models.User.comparePassword(curPassword, user.password, (err, isMatch) => {
+            if (isMatch) {
+                console.log('Update password matched.');
+                //let updatePassword = bcrypt.hashSync(newPassword, 10);
+                
+                    models.User.findByIdAndUpdate(
+                        userId,
+                        {
+                            $set: {
+                                username,
+                                email,
+                                name
+                            }
+                        },
+                        {
+                            new: true
+                        }
+                    ).then((updatedUser) => {
+                        return res.status(200).json({
+                            success: true,
+                            data: updatedUser
+                        });
+                    }).catch((error) => {
+                        console.log(error)
+                        if (error.errors.username) {
+                            return res.status(500).json({
+                                message: error.errors.username.message
+                            });
+                        }
+                        if (error.errors.email) {
+                            return res.status(500).json({
+                                message: error.errors.email.message
+                            });
+                        }
+                    });
+            } else {
+                return res.status(500).json({
+                    message: 'Wrong password.'
+                });
             }
-        },
-        {
-            new: true
-        }
-    ).then((updatedUser) => {
-        return res.status(200).json({
-            success: true,
-            data: updatedUser
         });
-    }).catch((error) => {
-        console.log(error)
-        if (error.errors.username) {
-            return res.status(500).json({
-                message: error.errors.username.message
-            });
-        }
-        if (error.errors.email) {
-            return res.status(500).json({
-                message: error.errors.email.message
-            });
-        }
     });
+    
 }
 
 // Passport authentication configuration

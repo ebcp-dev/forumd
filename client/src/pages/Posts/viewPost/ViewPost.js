@@ -140,12 +140,9 @@ class ViewPost extends Component {
           {this.state.post._comments && this.state.post._comments.reverse().map(comment => (
           <div key={comment.shortId} className="card card-body">
               <p className="card-text">{comment.text}</p>
-              <p className="card-text">{comment._author.username}</p>
+              <p className="card-text">by {comment._author.username}</p>
               <p className="card-text">
                   {this.parseDate(comment.createdAt).elapsed}
-              </p>
-              <p className="card-text">
-                  {comment.shortId}
               </p>
               {this.state.isAuthenticated && this.state.user.username === comment._author.username && (
               <DeleteComment shortId={comment.shortId} />

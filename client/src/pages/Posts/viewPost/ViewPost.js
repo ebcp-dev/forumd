@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './ViewPost.css';
 
+import Utility from '../../../Utility';
 import SubmitComment from './comments/submitComment';
 import DeleteComment from './comments/deleteComments';
 
@@ -11,18 +12,16 @@ class ViewPost extends Component {
     super(props);
     this.state = {
       post: null,
-      meta: {
-        upvotes: 0,
-        favorites: 0
-      },
+      comments: null,
+      sort: 'New',
+      bookmarked: false,
       isAuthenticated: null,
       user: null
     }
     this.getPost = this.getPost.bind(this);
-    this.parseDate = this.parseDate.bind(this);
-    this.handleFavorite = this.handleFavorite.bind(this);
-    this.handleUpvote = this.handleUpvote.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.handleSort = this.handleSort.bind(this);
+    this.handleBookmark = this.handleBookmark.bind(this);
   }
 
   componentWillMount() {
@@ -34,101 +33,115 @@ class ViewPost extends Component {
   }
 
   isAuthenticated() {
+    console.log('authenticated')
     axios.get('/api/user').then((response) => {
       console.log(response)
       if (response.data.user) {
-        this.setState({
+        return this.setState({
           isAuthenticated: true,
           user: response.data.user
         });
       } else {
-        this.setState({ isAuthenticated: false });
+        return this.setState({ isAuthenticated: false });
       }
-    });
+    }).then(result => {
+      if (this.state.post && this.state.user) {
+        if (this.state.user.bookmarks.includes(this.state.post.shortId)) {
+          this.setState({ bookmarked: true });
+        }
+      }
+    })
   }
 
   getPost() {
+    console.log('get post')
     let postTitle = this.props.match.params.title;
     let shortId = this.props.match.params.shortId;
     axios.get(`/api/post/${postTitle}/${shortId}`)
     .then(response => {
       return this.setState({ 
-        post: response.data
+        post: response.data,
+        comments: response.data._comments.reverse()
       });
+    })
+    .then(result => {
+      if (this.state.post && this.state.user) {
+        if (this.state.user.bookmarks.includes(this.state.post.shortId)) {
+          this.setState({ bookmarked: true });
+        }
+      }
     })
     .catch((error) => {
       console.log(error);
     });
   }
-
-  parseDate(parseDate) {
-    //since we are getting a UTC date
-    const msecPerMinute = 1000 * 60;  
-    const msecPerHour = msecPerMinute * 60;  
-    const msecPerDay = msecPerHour * 24;  
-
-    const date = new Date(parseDate);
-    const current = new Date();
-
-    let interval = current.getTime() - date.getTime();
-    let days = Math.floor(interval / msecPerDay );
-    //interval = interval - (days * msecPerDay );
-    let hours = Math.floor(interval / msecPerHour );
-    //interval = interval - (hours * msecPerHour );
-    let minutes = Math.floor(interval / msecPerMinute );
-    //interval = interval - (minutes * msecPerMinute );
-    let seconds = Math.floor(interval / 1000 );
-    let elapsed;
-    if (interval > 1000) {
-        elapsed = `${seconds} second(s) ago.`;
-    }
-    if (seconds > 60) {
-        elapsed = `${minutes} minute(s) ago.`;
-    }
-    if (minutes > 60) {
-        elapsed = `${hours} hour(s) ago.`;
-    }
-    if (hours > 24) {
-        elapsed = `${days} day(s) ago.`;
-    }
-    let parsedDate = {
-        month: date.getMonth()+1,
-        date: date.getDate(),
-        year: date.getFullYear(),
-        elapsed
-    };
-    return parsedDate;
-}
-
-  handleUpvote(e) {
+  // Add/remove bookmark
+  handleBookmark(e) {
     e.preventDefault();
-    let upvoted = this.state.meta.upvotes + 1;
-    
-    this.setState({ meta: { upvotes: upvoted, favorites: this.state.favorites } });
-    console.log(this.state.meta.favorites);
+    if (this.state.user) {
+      this.setState({
+        bookmarked: !this.state.bookmarked
+      });
+      if (this.state.bookmarked === true) {
+        axios.post('/api/removeBookmark', 
+        { postId: this.state.post.shortId })
+        .then(response => {
+          //console.log(response.data);
+          this.isAuthenticated();
+        });
+      }
+      if (this.state.bookmarked === false) {
+        axios.post('/api/addBookmark', 
+        { postId: this.state.post.shortId })
+        .then(response => {
+          //console.log(response.data);
+          this.isAuthenticated();
+        });
+      }
+    }
   }
-
-  handleFavorite(e) {
-    e.preventDefault();
-    let favorited = this.state.meta.favorites + 1;
-    
-    this.setState({ meta: { favorites: favorited, upvotes: this.state.upvotes } });
-    console.log(this.state.meta.upvotes);
+  // Sort by date
+  handleSort(e) {
+      e.preventDefault();
+      if (this.state.sort === 'New') {
+          this.setState({ 
+              sort: 'Old',
+              comments: this.state.comments.reverse()
+          });
+      } else if (this.state.sort === 'Old') {
+          this.setState({ 
+              sort: 'New',
+              comments: this.state.comments.reverse()
+          });
+      }
   }
 
   render() {
-    console.log(this.state);
+    console.log(this.state.bookmarked)
+    if (this.state.user) console.log(this.state.user.bookmarks);
     if(this.state.post) {
       return (
         <div className="Post">
           <div className="card">
             <div className="card-body">
                 <h4 className="card-title">{this.state.post.title}</h4>
-                <p className="card-text">{this.state.post._author.username}</p>
-                <p className="card-text">{this.parseDate(this.state.post.createdAt).elapsed}</p>
+                {this.state.post._author
+                ? <p className="card-text">{this.state.post._author.username}</p>
+                : <p className="card-text">deleted</p>
+                }
+                <p className="card-text">{Utility.parseDate(this.state.post.createdAt).elapsed}</p>
                 {this.state.post.link
-                ? <a href={this.state.post.link}>{this.state.post.link}</a>
-                : <p className="card-text">{this.state.post.text}</p>
+                ? <a className='d-inline-flex p-2' href={this.state.post.link}>{this.state.post.link}</a>
+                : <p className="card-text d-inline-flex p-2">{this.state.post.text}</p>
+                }
+                <hr/>
+                {this.state.bookmarked
+                ? <a onClick={this.handleBookmark} className='' href='#'>
+                  <i className="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+                  </a>
+                : <a onClick={this.handleBookmark} className='' href='#'>
+                  <i className="fa fa-bookmark-o fa-2x" aria-hidden="true"></i>
+                  </a>
                 }
             </div>
           </div>
@@ -137,15 +150,24 @@ class ViewPost extends Component {
               isAuthenticated={this.state.isAuthenticated}
               url={this.props.location.pathname} 
               postId={this.props.match.params.shortId} />
-          {this.state.post._comments && this.state.post._comments.reverse().map(comment => (
-          <div key={comment.shortId} className="card card-body">
+          <button onClick={this.handleSort} type="button" className="btn btn-elegant btn-sm">
+              <i className="fa fa-sort" aria-hidden="true"></i>
+              &nbsp; {this.state.sort}
+          </button>
+          {this.state.comments && this.state.comments.map(comment => (
+          <div key={comment.shortId} className="card card-body commentCard">
               <p className="card-text">{comment.text}</p>
-              <p className="card-text">by {comment._author.username}</p>
+              {comment._author 
+              ? <p className="card-text">by {comment._author.username}</p>
+              : <p className="card-text">by deleted</p>
+              }
               <p className="card-text">
-                  {this.parseDate(comment.createdAt).elapsed}
+                  {Utility.parseDate(comment.createdAt).elapsed}
               </p>
-              {this.state.isAuthenticated && this.state.user.username === comment._author.username && (
-              <DeleteComment shortId={comment.shortId} />
+              {comment._author && this.state.isAuthenticated && this.state.user.username === comment._author.username && (
+              <div className='flex-row'>
+                <DeleteComment deleted={this.getPost} shortId={comment.shortId} />
+              </div>
               )}
           </div>
           ))}

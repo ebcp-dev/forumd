@@ -14,14 +14,19 @@ class SubmitComment extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    componentDidMount() {
+        console.log(this.props)
+    }
+
     submitFormOnClick(e) {
         e.preventDefault();
         const { text } = this.state;
         let postTitle = this.props.title.split(' ').join('%20');
         let postId = this.props.postId;
+        let postLink = this.props.url.split(' ').join('%20');
         
         axios.post(`/api/post/${postTitle}/${postId}/submitComment`,
-        { text, postId })
+        { text, postId, postLink })
         .then(response => {
             this.setState({ success: true });
             console.log(response);
@@ -42,7 +47,7 @@ class SubmitComment extends Component {
         return (
             <div>
                 <p>
-                    <a className="btn btn-elegant" 
+                    <a className="btn btn-elegant btn-sm" 
                     data-toggle="collapse" href="#collapseExample" 
                     aria-expanded="false" aria-controls="collapseExample">
                     Comment on the post

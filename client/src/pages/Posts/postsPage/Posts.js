@@ -15,11 +15,8 @@ class Posts extends Component {
         this.state = {
             posts: [],
             isAuthenticated: null,
-            user: null,
-            sort: 'New'
+            user: null
         }
-
-        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount () {
@@ -29,7 +26,7 @@ class Posts extends Component {
 
     isAuthenticated() {
         axios.get('/api/user').then((response) => {
-            console.log(response)
+            //console.log(response)
             if (response.data.user) {
                 this.setState({
                     isAuthenticated: true,
@@ -42,50 +39,38 @@ class Posts extends Component {
     getPosts () {
         axios.get('/api/allPosts')
         .then(results => {
-            //console.log(results.data);
-            this.setState({ posts: results.data });
-        })
-    }
-
-    handleClick(e) {
-        e.preventDefault();
-        if (this.state.sort === 'New') {
-            this.setState({ sort: 'Old' });
-        } else if (this.state.sort === 'Old') {
-            this.setState({ sort: 'New' });
-        }
+            // Reverse array to sort by latest
+            this.setState({ 
+                posts: results.data.reverse()
+            });
+        });
     }
 
     render () {
         // Reverse posts to render latest first
         return (
-            <div className="container">
+            <div className="container posts">
                 <br />
                 <div className="animated row fadeIn">
                     <div className="col-md-8">
                         <a href="/posts">
-                            <h1 className="display-4">Posts</h1>
+                            <h1 className="h1-responsive display-4">Trending</h1>
                         </a>
                         <Link to="/posts/submitTextPost">
-                            <button type="button" className="btn btn-elegant">Submit a text post</button>
+                            <button type="button" className="btn btn-elegant btn-sm">Submit a text post</button>
                         </Link>
                         <Link to="/posts/submitLinkPost">
-                            <button type="button" className="btn btn-elegant">Submit a link post</button>
+                            <button type="button" className="btn btn-elegant btn-sm">Submit a link post</button>
                         </Link>
                     </div>
                 </div>
 
                 <hr/>
-                
-                <button onClick={this.handleClick} type="button" className="btn btn-elegant">
-                    <i className="fa fa-sort" aria-hidden="true"></i>
-                    &nbsp; {this.state.sort}
-                </button>
                 <Switch>
                     <Route path="/posts/submitTextPost" component={SubmitTextPost}/>
                     <Route path="/posts/submitLinkPost" component={SubmitLinkPost}/>
                     <Route exact path="/posts" render={(props) => (
-                        <PostsList posts={this.state.posts.reverse()} {...props} />
+                        <PostsList posts={this.state.posts} {...props} />
                     )}/>
                     <Route exact path={`${this.props.match.url}/:title/:shortId`} component={ViewPost}/>
                 </Switch>

@@ -17,7 +17,7 @@ postController.get = (req, res) => {
     });
 };
 
-// Retrieve specific post by title
+// Retrieve specific post by id
 postController.getPost = (req, res) => {
     // Parse url paramater
     let postShortId  = req.params.shortId;

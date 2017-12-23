@@ -26,7 +26,7 @@ class Login extends Component {
             window.location.reload();
         }).catch(error => {
             this.setState({ success: false, response: "Invalid credentials." });
-        })
+        });
     }
 
     handleChange(e) {

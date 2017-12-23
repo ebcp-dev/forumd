@@ -21,6 +21,10 @@ const commentSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    postLink: {
+        type: String,
+        required: true
+    },
     // References User collection
     _author: {
         type: Schema.ObjectId,

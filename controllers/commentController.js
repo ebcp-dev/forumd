@@ -37,6 +37,22 @@ commentController.getComment = (req, res) => {
     });
 };
 
+// Retrieve all comments of a specific user
+commentController.getAllUserComments = (req, res) => {
+    models.Comment.find({ _author: req.user._id, isDeleted: false }).then((result) => {
+        //console.log(result);
+        return res.status(200).json({
+            success: true,
+            data: result
+        });
+    }).catch((error) => {
+        console.log(error);
+        return res.status(500).json({
+            message: error
+        });
+    });
+};
+
 // Retrieve all comments
 commentController.getAll = (req, res) => {
     models.Comment.find({}).then((result) => {
@@ -63,7 +79,8 @@ commentController.getAll = (req, res) => {
    comment object's _post field as well as to find and 
    update the post's comments array. */
 commentController.submitNewComment = (req, res) => {
-    const text = req.body.text;
+    console.log(req.body)
+    const { text, postLink } = req.body;
     const postId = req.params.postId;
     const shortId = ids.generate();
     const userId = req.user._id;
@@ -81,7 +98,8 @@ commentController.submitNewComment = (req, res) => {
             shortId,
             text,
             _author: userId,
-            _post: post.id
+            _post: post.id,
+            postLink
         });
         
         newComment.save().then((result) => {
@@ -114,7 +132,7 @@ commentController.submitNewComment = (req, res) => {
 commentController.deleteComment = (req, res) => {
     let shortId = req.body.shortId;
     let userId = req.user._id;
-
+    console.log(req.body)
     models.Comment.findOneAndUpdate(
         { 
             shortId,

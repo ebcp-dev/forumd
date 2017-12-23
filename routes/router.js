@@ -26,9 +26,11 @@ router.get('/allUsers', userController.getAll);
 router.get('/logout', userController.logout);
 router.post('/register', userController.createNewUser);
 router.post('/updateUser', ensureAuthenticated, userController.updateUser);
+router.post('/addBookmark', ensureAuthenticated, userController.addBookmark);
+router.post('/removeBookmark', ensureAuthenticated, userController.removeBookmark);
 router.post('/login', userController.loginAuthentication);
 
-// Text post routes
+// Post routes
 router.get('/post', postController.get);
 router.get('/post/:postTitle/:shortId', postController.getPost);
 router.get('/allPosts', postController.getAll);
@@ -40,6 +42,7 @@ router.post('/post/:postTitle/:shortId/postVote', ensureAuthenticated, postContr
 router.get('/comment', commentController.get);
 router.get('/comment/:shortId', commentController.getComment);
 router.get('/allComments', commentController.getAll);
+router.get('/allUserComments', commentController.getAllUserComments);
 router.post('/post/:postTitle/:postId/submitComment', ensureAuthenticated, commentController.submitNewComment);
 router.post('/deleteComment', ensureAuthenticated, commentController.deleteComment);
 

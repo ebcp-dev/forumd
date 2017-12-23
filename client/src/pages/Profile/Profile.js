@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import './Profile.css';
 import axios from 'axios';
+import './Profile.css';
+
+import Utility from '../../Utility';
+import UserBookmarks from './bookmarks/UserBookmarks';
+import UserComments from './comments/UserComments';
 
 class Profile extends Component {
     constructor(props) {
@@ -16,18 +20,15 @@ class Profile extends Component {
         this.submitFormOnClick = this.submitFormOnClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-    
+    // Set initial state with user props
     componentWillMount() {
-        //this.isAuthenticated();
-        this.setState({
-            user: this.props.user
-        });
+        this.setState({ user: this.props.user });
     }
 
     componentDidMount() {
         this.isAuthenticated();
     }
-
+    
     isAuthenticated() {
         axios.get('/api/user').then((response) => {
             if (response.data.user) {
@@ -40,45 +41,6 @@ class Profile extends Component {
                 });
             }
         });
-    }
-
-    parseDate(parseDate) {
-        //since we are getting a UTC date
-        const msecPerMinute = 1000 * 60;  
-        const msecPerHour = msecPerMinute * 60;  
-        const msecPerDay = msecPerHour * 24;  
-
-        const date = new Date(parseDate);
-        const current = new Date();
-
-        let interval = current.getTime() - date.getTime();
-        let days = Math.floor(interval / msecPerDay );
-        //interval = interval - (days * msecPerDay );
-        let hours = Math.floor(interval / msecPerHour );
-        //interval = interval - (hours * msecPerHour );
-        let minutes = Math.floor(interval / msecPerMinute );
-        //interval = interval - (minutes * msecPerMinute );
-        let seconds = Math.floor(interval / 1000 );
-        let elapsed;
-        if (interval > 1000) {
-            elapsed = `${seconds} second(s) ago.`;
-        }
-        if (seconds > 60) {
-            elapsed = `${minutes} minute(s) ago.`;
-        }
-        if (minutes > 60) {
-            elapsed = `${hours} hour(s) ago.`;
-        }
-        if (hours > 24) {
-            elapsed = `${days} day(s) ago.`;
-        }
-        let parsedDate = {
-            month: date.getMonth()+1,
-            date: date.getDate(),
-            year: date.getFullYear(),
-            elapsed
-        };
-        return parsedDate;
     }
 
     submitFormOnClick(e) {
@@ -115,7 +77,7 @@ class Profile extends Component {
             });
         });
     }
-
+    // Get value of input fields and assign to state
     handleChange(e) {
         const values = this.state;
         values[e.target.name] = e.target.value;
@@ -123,57 +85,85 @@ class Profile extends Component {
     }
 
     render() {
+        console.log(this.state)
         const dbusername = this.state.user.username;
         const dbemail = this.state.user.email;
         const dbname = this.state.user.name;
-        const { createdAt } = this.state.user;
+        const { createdAt, bookmarks } = this.state.user;
         const { username, email, name, curPassword } = this.state;
         return (
-            <div className="container">
+            <div className="container profile">
                 <div className="jumbotron">
                     <h4 className="card-title">Username: {dbusername}</h4>
                     <p className="card-text">Email: {dbemail}</p>
                     <p className="card-text">Name: {dbname}</p>
-                    <p className="card-text">Created: {this.parseDate(createdAt).elapsed}</p>
+                    <p className="card-text">Created: {Utility.parseDate(createdAt).elapsed}</p>
+                    <a className="btn btn-elegant" data-toggle="collapse" href="#editForm" aria-expanded="false" aria-controls="editForm">
+                        Edit
+                    </a>
                 </div>
                 {this.state.success === false && (
                     <div className="modal-body">
                         <p className="red-text">{this.state.response}</p>
                     </div>
                 )}
-                <form onSubmit={this.submitFormOnClick}>
-                    <div className="modal-body">
-                        <div className="md-form">
-                            <input type="text" id="username-form" 
-                            className="form-control" name="username" 
-                            value={username} onChange={this.handleChange}/>
-                            <label htmlFor="username-form">Username</label>
+                <div className="collapse" id="editForm">
+                    <div className="card card-body">
+                        <form onSubmit={this.submitFormOnClick}>
+                            <div className="modal-body">
+                                <div className="">
+                                    <input type="text" id="username-form" 
+                                    className="form-control" name="username" 
+                                    value={username} onChange={this.handleChange}/>
+                                    <label className="profileFormLabel" htmlFor="username-form">Username</label>
+                                </div>
+                                <div className="">
+                                    <input type="text" id="email-form" 
+                                    className="form-control" name="email"
+                                    value={email} onChange={this.handleChange}/>
+                                    <label className="profileFormLabel" htmlFor="email-form">Email</label>
+                                </div>
+                                <div className="">
+                                    <input type="text" id="name-form" 
+                                    className="form-control" name="name"
+                                    value={name} onChange={this.handleChange}/>
+                                    <label className="profileFormLabel" htmlFor="name-form">Name</label>
+                                </div>
+                                <div className="">
+                                    <input type="text" id="password-form" 
+                                    className="form-control" name="curPassword"
+                                    value={curPassword} onChange={this.handleChange}/>
+                                    <label className="profileFormLabel" htmlFor="curPassword-form">Password</label>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <div className="flex-row">
+                                    <button type="submit" className="btn btn-elegant">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <nav className="nav nav-tabs" id="myTab" role="tablist">
+                        <a className="nav-item nav-link active" 
+                        id="nav-comments-tab" data-toggle="tab" href="#nav-comments">
+                            Comments
+                        </a>
+                        <a className="nav-item nav-link" 
+                        id="nav-bookmarks-tab" data-toggle="tab" href="#nav-bookmarks">
+                            Bookmarks
+                        </a>
+                    </nav>
+                    <div className="tab-content" id="nav-tabContent">
+                        <div className='tab-pane fade show active' id="nav-comments">
+                            <UserComments />
                         </div>
-                        <div className="md-form">
-                            <input type="text" id="email-form" 
-                            className="form-control" name="email"
-                            value={email} onChange={this.handleChange}/>
-                            <label htmlFor="email-form">Email</label>
-                        </div>
-                        <div className="md-form">
-                            <input type="text" id="name-form" 
-                            className="form-control" name="name"
-                            value={name} onChange={this.handleChange}/>
-                            <label htmlFor="name-form">Name</label>
-                        </div>
-                        <div className="md-form">
-                            <input type="text" id="password-form" 
-                            className="form-control" name="curPassword"
-                            value={curPassword} onChange={this.handleChange}/>
-                            <label htmlFor="curPassword-form">Password</label>
+                        <div className='tab-pane fade' id="nav-bookmarks">
+                            <UserBookmarks bookmarks={bookmarks} />
                         </div>
                     </div>
-                    <div className="modal-footer">
-                        <div className="flex-row">
-                            <button type="submit" className="btn btn-elegant">Submit</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         );
     }

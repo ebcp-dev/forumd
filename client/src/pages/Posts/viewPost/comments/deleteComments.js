@@ -5,33 +5,31 @@ import axios from 'axios';
 class DeleteComment extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            isDeleted: false
+        }
         this.submitFormOnClick = this.submitFormOnClick.bind(this);
     }
 
     submitFormOnClick(e) {
         e.preventDefault();
+        if(this.props.deleted) this.props.deleted();
         const commentId = this.props.shortId;
         
-        axios.post(`/api/deleteComment`, commentId)
+        axios.post(`/api/deleteComment`, {shortId: commentId})
         .then(response => {
             console.log(response);
+            this.setState({ isDeleted: true });
         }).catch(error => {
             console.log(error.response);
-        })
-
-        //window.location.reload();
+        });
     }
 
     render () {
         return (
-            <div>
-                <form onSubmit={this.submitFormOnClick}>
-                    <div className="flex-row">
-                        <button type="submit" className="btn btn-elegant">Delete</button>
-                    </div>
-                </form>
-            </div>
+            <a onClick={this.submitFormOnClick} className="card-link">
+            Delete
+            </a>
         );
     }
 }

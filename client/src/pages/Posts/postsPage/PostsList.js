@@ -1,73 +1,94 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Pagination from '../../../Pagination';
 import './Posts.css';
 
+import Utility from '../../../Utility';
+
 class PostsList extends Component {
-
-    parseDate(parseDate) {
-        //since we are getting a UTC date
-        const msecPerMinute = 1000 * 60;  
-        const msecPerHour = msecPerMinute * 60;  
-        const msecPerDay = msecPerHour * 24;  
-
-        const date = new Date(parseDate);
-        const current = new Date();
-
-        let interval = current.getTime() - date.getTime();
-        let days = Math.floor(interval / msecPerDay );
-        //interval = interval - (days * msecPerDay );
-        let hours = Math.floor(interval / msecPerHour );
-        //interval = interval - (hours * msecPerHour );
-        let minutes = Math.floor(interval / msecPerMinute );
-        //interval = interval - (minutes * msecPerMinute );
-        let seconds = Math.floor(interval / 1000 );
-        let elapsed;
-        if (interval > 1000) {
-            elapsed = `${seconds} second(s) ago.`;
-        }
-        if (seconds > 60) {
-            elapsed = `${minutes} minute(s) ago.`;
-        }
-        if (minutes > 60) {
-            elapsed = `${hours} hour(s) ago.`;
-        }
-        if (hours > 24) {
-            elapsed = `${days} day(s) ago.`;
-        }
-        let parsedDate = {
-            month: date.getMonth()+1,
-            date: date.getDate(),
-            year: date.getFullYear(),
-            elapsed
+    constructor() {
+        super();
+ 
+        this.state = {
+            pageOfItems: [],
+            sort: 'New'
         };
-        return parsedDate;
+ 
+        this.onChangePage = this.onChangePage.bind(this);
+        this.handleSort = this.handleSort.bind(this);
+    }
+    
+    onChangePage(pageOfItems) {
+        // Update state with new page of items
+        this.setState({ pageOfItems: pageOfItems });
+    }
+    // Sort by date
+    handleSort(e) {
+        e.preventDefault();
+        if (this.state.sort === 'New') {
+            this.setState({ 
+                sort: 'Old',
+                posts: this.state.pageOfItems.reverse()
+            });
+        } else if (this.state.sort === 'Old') {
+            this.setState({ 
+                sort: 'New',
+                posts: this.state.pageOfItems.reverse()
+            });
+        }
     }
 
     render() {
+        console.log(this.props.posts)
         return (
-            <div className="row">
-                {this.props.posts.map(post => (
-                <div key={post._id} className="col-md-4">
-                    <div className="card">
-                        <div className="card-body">
-                            <h4 className="card-title">{post.title}</h4>
-                            <p className="card-text">by {post._author.username}</p>
-                            <p className="card-text">
-                                {this.parseDate(post.createdAt).month}
-                                /{this.parseDate(post.createdAt).date}
-                                /{this.parseDate(post.createdAt).year}
-                            </p>
-                            <p className="card-text">
-                                {this.parseDate(post.createdAt).elapsed}
-                            </p>
-                            <Link to={`${this.props.match.url}/${post.title}/${post.shortId}`}>
-                                <button type="button" className="btn btn-elegant">Open</button>
-                            </Link>
+            <div>
+                <button onClick={this.handleSort} type="button" className="btn btn-elegant btn-sm">
+                    <i className="fa fa-sort" aria-hidden="true"></i>
+                    &nbsp; {this.state.sort}
+                </button>
+                <div className="row postsList">
+                    {this.state.pageOfItems.map(post => (
+                    <div key={post._id} className="col-sm-4">
+                        <div className="card">
+                            <div className="card-body">
+                                {post.link
+                                    ?
+                                    <div className='flex-row'>
+                                        <Link className='d-inline-flex p-2' to={`${this.props.match.url}/${post.title}/${post.shortId}`}>
+                                            <h4 className="card-title h4-responsive">{post.title}</h4>
+                                        </Link>
+                                        <a className='d-inline-flex p-2' href={post.link}>
+                                            <i className="fa fa-external-link" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                    :
+                                    <Link to={`${this.props.match.url}/${post.title}/${post.shortId}`}>
+                                        <h4 className="card-title h4-responsive">{post.title}</h4>
+                                    </Link>
+                                }
+                                {post._author 
+                                ? <p className="card-text">by {post._author.username}</p>
+                                : <p className="card-text">by deleted</p>
+                                }
+                                <p className="card-text">
+                                    {Utility.parseDate(post.createdAt).month}
+                                    /{Utility.parseDate(post.createdAt).date}
+                                    /{Utility.parseDate(post.createdAt).year}
+                                </p>
+                                <p className="card-text">
+                                    {Utility.parseDate(post.createdAt).elapsed}
+                                </p>
+                                <Link to={`${this.props.match.url}/${post.title}/${post.shortId}`}>
+                                    <i className="fa fa-comments-o" aria-hidden="true"></i>
+                                    &nbsp;{post._comments.length}
+                                </Link>
+                            </div>
                         </div>
+                        <br/>
                     </div>
-                    <br/>
+                    ))}
                 </div>
-                ))}
+                <Pagination items={this.props.posts} onChangePage={this.onChangePage} />
             </div>
         );
     }

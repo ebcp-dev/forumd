@@ -1,11 +1,9 @@
-main {
-    padding-bottom: 2rem;
-    margin-top: 4rem;
+html, body, #root, #root > div {
+    height: 100%;
 }
 
-.extra-margins {
-    margin-top: 1rem;
-    margin-bottom: 2.5rem;
+.modal .modal-dialog .modal-content {
+    border-radius: 0;
 }
 
 .jumbotron {
@@ -18,7 +16,6 @@ main {
 
 footer.page-footer {
     background-color: #222;
-    margin-top: 2rem;
 }
 
 /* Scrollbar */

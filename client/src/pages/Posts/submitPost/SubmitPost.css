@@ -1,3 +1,7 @@
 #text-form {
     height: 100px;
 }
+
+.submitPostForm {
+    min-height: 73vh;
+}

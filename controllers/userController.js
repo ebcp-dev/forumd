@@ -117,6 +117,59 @@ userController.updateUser = (req, res) => {
     
 }
 
+// Adds bookmark
+userController.addBookmark = (req, res) => {
+    const userId = req.user._id;
+    const newBookmark = req.body.postId
+    console.log(req.body);
+    models.User.findByIdAndUpdate(userId,
+        {
+            $addToSet: {
+                bookmarks: newBookmark
+            }
+        },
+        {
+            new: true
+        }
+    ).then(updatedUser => {
+        return res.status(200).json({
+            success: true,
+            data: updatedUser
+        });
+    }).catch((error) => {
+        return res.status(500).json({
+            message: error.errors
+        });
+    });
+}
+
+// Removes bookmark
+userController.removeBookmark = (req, res) => {
+    const userId = req.user._id;
+    const deletedBookmark = req.body.postId
+    console.log(req.body);
+    models.User.findByIdAndUpdate(userId,
+        {
+            $pull: {
+                bookmarks: deletedBookmark
+            }
+        },
+        {
+            new: true
+        }
+    ).then(updatedUser => {
+        return res.status(200).json({
+            success: true,
+            data: updatedUser
+        });
+    }).catch((error) => {
+        console.log(error)
+        return res.status(500).json({
+            message: error.errors
+        });
+    });
+}
+
 // Passport authentication configuration
 passport.use(new LocalStrategy((username, password, done) => {
     models.User.findOne({ username }, (err, user) => {

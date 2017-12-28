@@ -27,15 +27,16 @@ class ViewPost extends Component {
 
   componentWillMount() {
     this.getPost();
+    this.isAuthenticated();
   }
 
   componentDidMount() {
-    this.isAuthenticated();
+    //this.isAuthenticated();
   }
 
   isAuthenticated() {
     axios.get('/api/user').then((response) => {
-      console.log(response);
+      //console.log(response);
       if (response.data.user) {
         return this.setState({
           isAuthenticated: true,
@@ -118,7 +119,7 @@ class ViewPost extends Component {
   }
 
   render() {
-    console.log(this.state.bookmarked)
+    //console.log(this.state.bookmarked)
     if(this.state.post) {
       return (
         <div className="Post">

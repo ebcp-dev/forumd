@@ -30,13 +30,13 @@ class UserBookmarks extends Component {
                 <p className="card-text">Your bookmarked content.</p>
                 <div className='userBookmarks'>
                     {this.state.pageOfItems.map(bookmark => {
+                    let title = bookmark.split('/')[2]
                     return (
                     <div key={bookmark} >
                         <div className='card card-body'>
-                            <p className='card-text'>{bookmark}</p>
                             <div className='flex-row'>
-                                <Link className='card-link' to={`url`}>
-                                    Visit
+                                <Link className='card-link' to={`${bookmark}`}>
+                                    {title}
                                 </Link>
                             </div>
                         </div>

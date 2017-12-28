@@ -16,7 +16,8 @@ class ViewPost extends Component {
       sort: 'New',
       bookmarked: false,
       isAuthenticated: null,
-      user: null
+      user: null,
+      url: null
     }
     this.getPost = this.getPost.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
@@ -33,9 +34,8 @@ class ViewPost extends Component {
   }
 
   isAuthenticated() {
-    console.log('authenticated')
     axios.get('/api/user').then((response) => {
-      console.log(response)
+      console.log(response);
       if (response.data.user) {
         return this.setState({
           isAuthenticated: true,
@@ -44,29 +44,24 @@ class ViewPost extends Component {
       } else {
         return this.setState({ isAuthenticated: false });
       }
-    }).then(result => {
-      if (this.state.post && this.state.user) {
-        if (this.state.user.bookmarks.includes(this.state.post.shortId)) {
-          this.setState({ bookmarked: true });
-        }
-      }
-    })
+    });
   }
 
   getPost() {
-    console.log('get post')
     let postTitle = this.props.match.params.title;
     let shortId = this.props.match.params.shortId;
     axios.get(`/api/post/${postTitle}/${shortId}`)
     .then(response => {
       return this.setState({ 
         post: response.data,
-        comments: response.data._comments.reverse()
+        comments: response.data._comments.reverse(),
+        url: this.props.location.pathname
       });
     })
     .then(result => {
       if (this.state.post && this.state.user) {
-        if (this.state.user.bookmarks.includes(this.state.post.shortId)) {
+        console.log(this.state.user.bookmarks.includes(this.props.location.pathname))
+        if (this.state.user.bookmarks.includes(this.props.location.pathname)) {
           this.setState({ bookmarked: true });
         }
       }
@@ -84,19 +79,25 @@ class ViewPost extends Component {
       });
       if (this.state.bookmarked === true) {
         axios.post('/api/removeBookmark', 
-        { postId: this.state.post.shortId })
+        { 
+          link: this.props.location.pathname
+        })
         .then(response => {
           //console.log(response.data);
           this.isAuthenticated();
         });
+        window.location.reload();
       }
       if (this.state.bookmarked === false) {
         axios.post('/api/addBookmark', 
-        { postId: this.state.post.shortId })
+        { 
+          link: this.props.location.pathname
+        })
         .then(response => {
           //console.log(response.data);
           this.isAuthenticated();
         });
+        window.location.reload();
       }
     }
   }
@@ -118,7 +119,6 @@ class ViewPost extends Component {
 
   render() {
     console.log(this.state.bookmarked)
-    if (this.state.user) console.log(this.state.user.bookmarks);
     if(this.state.post) {
       return (
         <div className="Post">
@@ -136,10 +136,10 @@ class ViewPost extends Component {
                 }
                 <hr/>
                 {this.state.bookmarked
-                ? <a onClick={this.handleBookmark} className='' href='#'>
+                ? <a onClick={this.handleBookmark} className='' href=''>
                   <i className="fa fa-bookmark fa-2x" aria-hidden="true"></i>
                   </a>
-                : <a onClick={this.handleBookmark} className='' href='#'>
+                : <a onClick={this.handleBookmark} className='' href=''>
                   <i className="fa fa-bookmark-o fa-2x" aria-hidden="true"></i>
                   </a>
                 }

@@ -120,7 +120,7 @@ userController.updateUser = (req, res) => {
 // Adds bookmark
 userController.addBookmark = (req, res) => {
     const userId = req.user._id;
-    const newBookmark = req.body.postId
+    const newBookmark = req.body.link
     console.log(req.body);
     models.User.findByIdAndUpdate(userId,
         {
@@ -146,7 +146,7 @@ userController.addBookmark = (req, res) => {
 // Removes bookmark
 userController.removeBookmark = (req, res) => {
     const userId = req.user._id;
-    const deletedBookmark = req.body.postId
+    const deletedBookmark = req.body.link
     console.log(req.body);
     models.User.findByIdAndUpdate(userId,
         {

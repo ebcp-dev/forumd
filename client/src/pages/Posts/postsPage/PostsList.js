@@ -41,12 +41,12 @@ class PostsList extends Component {
     render() {
         console.log(this.props.posts)
         return (
-            <div>
+            <div className="postsList">
                 <button onClick={this.handleSort} type="button" className="btn btn-elegant btn-sm">
                     <i className="fa fa-sort" aria-hidden="true"></i>
                     &nbsp; {this.state.sort}
                 </button>
-                <div className="row postsList">
+                <div className="row">
                     {this.state.pageOfItems.map(post => (
                     <div key={post._id} className="col-sm-4">
                         <div className="card">

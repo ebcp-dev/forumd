@@ -31,7 +31,7 @@ class ViewPost extends Component {
   }
 
   componentDidMount() {
-    //this.isAuthenticated();
+    this.isAuthenticated();
   }
 
   isAuthenticated() {
@@ -87,7 +87,6 @@ class ViewPost extends Component {
           //console.log(response.data);
           this.isAuthenticated();
         });
-        window.location.reload();
       }
       if (this.state.bookmarked === false) {
         axios.post('/api/addBookmark', 
@@ -98,7 +97,6 @@ class ViewPost extends Component {
           //console.log(response.data);
           this.isAuthenticated();
         });
-        window.location.reload();
       }
     }
   }

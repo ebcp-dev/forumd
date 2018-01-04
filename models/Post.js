@@ -60,10 +60,10 @@ const populateAuthor = function(next) {
 const populateComments = function(next) {
     this.populate({
         path: '_comments',
-        select: '_author createdAt text _post shortId -_id',
-        match: {
-            'isDeleted': false
-        }
+        select: '_author createdAt isDeleted text _post shortId -_id',
+        // match: {
+        //     'isDeleted': false
+        // }
     });
     next();
 };

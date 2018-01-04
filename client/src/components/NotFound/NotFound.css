@@ -1,0 +1,8 @@
+.notfound {
+    background: url('../../images/404image.jpeg')no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 73vh;
+}

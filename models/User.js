@@ -17,7 +17,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    bookmarks: [String],
     email: {
         type: String,
         required: true,

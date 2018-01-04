@@ -21,8 +21,28 @@ postController.get = (req, res) => {
 postController.getPost = (req, res) => {
     // Parse url paramater
     let postShortId  = req.params.shortId;
-    models.Post.findOne({ shortId: postShortId }).then((result) => {
+    models.Post.findOne({ 
+        shortId: postShortId, 
+        isDeleted: false 
+    }).then((result) => {
+        console.log(result)
         return res.json(result);
+    }).catch((error) => {
+        console.log(error);
+        return res.status(500).json({
+            message: error
+        });
+    });
+};
+
+// Retrieve all posts of a specific user
+postController.getAllUserPosts = (req, res) => {
+    models.Post.find({ _author: req.user._id, isDeleted: false }).then((result) => {
+        //console.log(result);
+        return res.status(200).json({
+            success: true,
+            data: result
+        });
     }).catch((error) => {
         console.log(error);
         return res.status(500).json({
@@ -33,7 +53,7 @@ postController.getPost = (req, res) => {
 
 // Retrieve all posts
 postController.getAll = (req, res) => {
-    models.Post.find({}).then((result) => {
+    models.Post.find({ isDeleted: false }).then((result) => {
         //console.log(result);
         return res.json(result);
     }).catch((error) => {
@@ -50,6 +70,7 @@ postController.getAll = (req, res) => {
 
 // Submit new post
 postController.submitNewPost = (req, res) => {
+    // Can receive either link OR text. Not both.
     const { title, link, text } = req.body;
     const userId = req.user._id;
     let shortId = ids.generate();
@@ -60,9 +81,6 @@ postController.submitNewPost = (req, res) => {
         console.log(shortIdExists(shortId));
         shortId = ids.generate();
     }
-
-    // Validate between link and text
-    // Can't be both
 
     const newPost = new models.Post({
         shortId,
@@ -84,14 +102,6 @@ postController.submitNewPost = (req, res) => {
             message: error
         });
     });
-};
-
-// Vote on a post
-postController.postVote = (req, res) => {
-    const shortId = req.params.shortId;
-    const userId = req.user._id;
-    const voteValue = req.body.vote > 0 ? 1 : -1;
-    
 };
 
 // Sets posts to isDeleted: true only if

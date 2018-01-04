@@ -34,15 +34,15 @@ router.post('/login', userController.loginAuthentication);
 router.get('/post', postController.get);
 router.get('/post/:postTitle/:shortId', postController.getPost);
 router.get('/allPosts', postController.getAll);
+router.get('/allUserPosts', ensureAuthenticated, postController.getAllUserPosts);
 router.post('/submitPost', ensureAuthenticated, postController.submitNewPost);
 router.post('/deletePost', ensureAuthenticated, postController.deletePost);
-router.post('/post/:postTitle/:shortId/postVote', ensureAuthenticated, postController.postVote);
 
 // Comments routes
 router.get('/comment', commentController.get);
 router.get('/comment/:shortId', commentController.getComment);
 router.get('/allComments', commentController.getAll);
-router.get('/allUserComments', commentController.getAllUserComments);
+router.get('/allUserComments', ensureAuthenticated, commentController.getAllUserComments);
 router.post('/post/:postTitle/:postId/submitComment', ensureAuthenticated, commentController.submitNewComment);
 router.post('/deleteComment', ensureAuthenticated, commentController.deleteComment);
 

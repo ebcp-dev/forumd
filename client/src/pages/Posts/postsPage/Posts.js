@@ -19,8 +19,11 @@ class Posts extends Component {
         }
     }
 
-    componentDidMount () {
+    componentWillMount() {
         this.getPosts();
+    }
+
+    componentDidMount () {
         this.isAuthenticated();
     }
 

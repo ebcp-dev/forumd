@@ -32,7 +32,7 @@ Utility.parseDate = (parseDate) => {
     if (hours > 24) {
         elapsed = `${days} day(s) ago.`;
     }
-    let parsedDate = {
+    const parsedDate = {
         month: date.getMonth()+1,
         date: date.getDate(),
         year: date.getFullYear(),

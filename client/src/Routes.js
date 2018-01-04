@@ -48,42 +48,42 @@ class Routes extends Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand-sm navbar-dark fixed-top elegant-color-dark">
-              <a className="navbar-brand" href="/">FORUM'd</a>
-              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                  aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
-              <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                        <a href="/posts" className="nav-link">Trending</a>
+          <nav className='navbar navbar-expand-sm navbar-dark fixed-top elegant-color-dark'>
+              <a className='navbar-brand' href='/'>FORUM'd</a>
+              <button className='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
+                  aria-expanded='false' aria-label='Toggle navigation'><span className='navbar-toggler-icon'></span></button>
+              <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+                  <ul className='navbar-nav mr-auto'>
+                      <li className='nav-item'>
+                        <a href='/posts' className='nav-link'>Trending</a>
                       </li>
                       {this.state.user && (
-                      <li className="nav-item">
-                        <Link className="nav-link" to='/profile'>
+                      <li className='nav-item'>
+                        <Link className='nav-link' to='/profile'>
                           {this.state.user.username}
                         </Link>
                       </li>
                       )}
                       {!this.state.user && (
-                      <li className="nav-item">
-                        <a href="/register" className="nav-link"
-                        data-toggle="modal" data-target="#registerModal">
+                      <li className='nav-item'>
+                        <a href='/register' className='nav-link'
+                        data-toggle='modal' data-target='#registerModal'>
                           Register
                         </a>
                       </li>
                       )}
                       {this.state.user
                         ? 
-                      <li className="nav-item">
-                        <a onClick={this.logout} href="/logout" className="nav-link">
+                      <li className='nav-item'>
+                        <a onClick={this.logout} href='/logout' className='nav-link'>
                           Logout
                         </a>
                       </li>
                         : 
                       <div>
-                        <li className="nav-item">
-                          <a href="/login" className="nav-link"
-                          data-toggle="modal" data-target="#loginModal">
+                        <li className='nav-item'>
+                          <a href='/login' className='nav-link'
+                          data-toggle='modal' data-target='#loginModal'>
                             Login
                           </a>
                         </li>
@@ -95,20 +95,20 @@ class Routes extends Component {
           <Login />
           <Register />
           <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/profile" render={(props) => (
+            <Route exact path='/' component={Home}/>
+            <Route path='/profile' render={(props) => (
               this.state.user ? (
                 <Profile user={this.state.user} {...props} />
               ) : (
                 <Redirect to='/'/>
               )
             )}/>
-            <Route path="/posts" render={(props) => (
-              <Posts {...props} update={true} />
+            <Route path='/posts' render={(props) => (
+              <Posts {...props} />
             )}/>
-            <Route exact path="/login" component={Login}/>
-            <Route exact path="/logout" render={() => (
-                <Redirect to='/'/>
+            <Route exact path='/login' component={Login}/>
+            <Route exact path='/logout' render={() => (
+                <Redirect to='/posts'/>
             )}/>
             <Route path='*' component={NotFound}/>
           </Switch>

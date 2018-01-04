@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import './ViewPost.css';
 
 import Utility from '../../../Utility';
+import DeletePost from './deletePost/deletePost';
 import SubmitComment from './comments/submitComment';
 import DeleteComment from './comments/deleteComments';
 
@@ -11,13 +13,13 @@ class ViewPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      post: null,
-      comments: null,
+      post: {},
+      comments: [],
       sort: 'New',
       bookmarked: false,
-      isAuthenticated: null,
-      user: null,
-      url: null
+      isAuthenticated: false,
+      user: {},
+      url: ''
     }
     this.getPost = this.getPost.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
@@ -27,7 +29,6 @@ class ViewPost extends Component {
 
   componentWillMount() {
     this.getPost();
-    this.isAuthenticated();
   }
 
   componentDidMount() {
@@ -45,6 +46,17 @@ class ViewPost extends Component {
       } else {
         return this.setState({ isAuthenticated: false });
       }
+    })
+    .then(result => {
+      if (this.state.post && this.state.user) {
+        if (this.state.user.bookmarks.includes(this.props.location.pathname)) {
+          this.setState({ bookmarked: true });
+        }
+        console.log(this.state.user.bookmarks);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
     });
   }
 
@@ -53,22 +65,13 @@ class ViewPost extends Component {
     let shortId = this.props.match.params.shortId;
     axios.get(`/api/post/${postTitle}/${shortId}`)
     .then(response => {
-      return this.setState({ 
-        post: response.data,
-        comments: response.data._comments.reverse(),
-        url: this.props.location.pathname
-      });
-    })
-    .then(result => {
-      if (this.state.post && this.state.user) {
-        console.log(this.state.user.bookmarks.includes(this.props.location.pathname))
-        if (this.state.user.bookmarks.includes(this.props.location.pathname)) {
-          this.setState({ bookmarked: true });
-        }
+      if (response.data) {
+        return this.setState({ 
+          post: response.data,
+          comments: response.data._comments.reverse(),
+          url: this.props.location.pathname
+        });
       }
-    })
-    .catch((error) => {
-      console.log(error);
     });
   }
   // Add/remove bookmark
@@ -117,8 +120,8 @@ class ViewPost extends Component {
   }
 
   render() {
-    //console.log(this.state.bookmarked)
-    if(this.state.post) {
+    console.log(this.state)
+    if(!this.state.post.isDeleted) {
       return (
         <div className="Post">
           <div className="card">
@@ -135,13 +138,16 @@ class ViewPost extends Component {
                 }
                 <hr/>
                 {this.state.bookmarked
-                ? <a onClick={this.handleBookmark} className='' href=''>
+                ? <a onClick={this.handleBookmark} className='card-link' href=''>
                   <i className="fa fa-bookmark fa-2x" aria-hidden="true"></i>
                   </a>
-                : <a onClick={this.handleBookmark} className='' href=''>
+                : <a onClick={this.handleBookmark} className='card-link' href=''>
                   <i className="fa fa-bookmark-o fa-2x" aria-hidden="true"></i>
                   </a>
                 }
+                {this.state.isAuthenticated && this.state.post._author.username === this.state.user.username && (
+                <DeletePost shortId={this.state.post.shortId} />
+                )}
             </div>
           </div>
           <hr />
@@ -173,7 +179,9 @@ class ViewPost extends Component {
         </div>
       );
     }
-    return null;
+    return (
+      <Redirect to='/notfound' />
+    );
   }
 }
 

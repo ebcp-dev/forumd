@@ -46,6 +46,7 @@ userController.createNewUser = (req, res) => {
 
     models.User.createUser(newUser, (error, result) => {
         if (error) {
+            console.log(error)
             if (error.errors.username) {
                 return res.status(500).json({
                     message: error.errors.username.message

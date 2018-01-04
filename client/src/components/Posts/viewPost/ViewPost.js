@@ -6,6 +6,7 @@ import './ViewPost.css';
 import Utility from '../../../Utility';
 import SubmitComment from '../comments/submitComment';
 import DeleteComment from '../comments/deleteComments';
+import EditPost from '../editPost/EditPost';
 
 class ViewPost extends Component {
     constructor() {
@@ -17,6 +18,7 @@ class ViewPost extends Component {
             sort: 'New'
         };
         this.handleSort = this.handleSort.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.deletePost = this.deletePost.bind(this);
     }
 
@@ -28,7 +30,7 @@ class ViewPost extends Component {
         let postTitle = this.props.match.params.title;
         let shortId = this.props.match.params.shortId;
         axios.get(`/api/post/${postTitle}/${shortId}`).then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             return this.setState({
                 post: response.data,
                 comments: response.data._comments.reverse()
@@ -67,8 +69,12 @@ class ViewPost extends Component {
         }
     }
 
+    handleChange(value) {
+        this.setState({ text: value});
+    }
+
     render() {
-        console.log(this.state);
+        //console.log(this.state);
         if (this.state.post && this.state.post !== 'deleted') {
             const { post, comments, sort } = this.state;
             return (
@@ -99,9 +105,19 @@ class ViewPost extends Component {
                         {post._author && (
                             <div>
                                 {this.props.user && this.props.user.username === post._author.username && (
-                                <button onClick={this.deletePost} className='btn btn-danger btn-sm'>
-                                    Delete Post
-                                </button>
+                                <div>
+                                    <button type='button' data-toggle='collapse' 
+                                     data-target='#edit-post-form' aria-expanded='false' 
+                                     aria-controls='edit-post-form' className='btn btn-default btn-sm p-2'>
+                                       Edit Post
+                                    </button>
+                                    <button onClick={this.deletePost} className='btn btn-danger btn-sm p-2'>
+                                        Delete Post
+                                    </button>
+                                    {post.text && (
+                                    <EditPost text={post.text} shortId={post.shortId} />
+                                    )}
+                                </div>
                                 )}
                             </div>
                         )}
@@ -118,12 +134,12 @@ class ViewPost extends Component {
                                 return (
                                     <div key={comment.shortId}>
                                         <blockquote className='blockquote'>
-                                            <p className='mb-0'>{comment.text}</p>
+                                            <div dangerouslySetInnerHTML={{__html: comment.text}}></div>
                                             {comment._author && !comment._author.isDeleted
-                                            ?   <footer className="blockquote-footer">
+                                            ?   <footer className='blockquote-footer'>
                                                 {comment._author.username}, {Utility.parseDate(comment.createdAt).elapsed}
                                                 </footer>
-                                            :   <footer className="blockquote-footer">deleted, {Utility.parseDate(comment.createdAt).elapsed}</footer>
+                                            :   <footer className='blockquote-footer'>deleted, {Utility.parseDate(comment.createdAt).elapsed}</footer>
                                             }
                                             {comment._author && this.props.user && this.props.user.username === comment._author.username && (
                                             <DeleteComment shortId={comment.shortId} />
@@ -148,7 +164,22 @@ class ViewPost extends Component {
                 <Redirect to='/' />
             );
         }
-        return <h1>Post Deleted</h1>;
+        return (
+            <div className='sk-circle'>
+                <div className='sk-circle1 sk-child'></div>
+                <div className='sk-circle2 sk-child'></div>
+                <div className='sk-circle3 sk-child'></div>
+                <div className='sk-circle4 sk-child'></div>
+                <div className='sk-circle5 sk-child'></div>
+                <div className='sk-circle6 sk-child'></div>
+                <div className='sk-circle7 sk-child'></div>
+                <div className='sk-circle8 sk-child'></div>
+                <div className='sk-circle9 sk-child'></div>
+                <div className='sk-circle10 sk-child'></div>
+                <div className='sk-circle11 sk-child'></div>
+                <div className='sk-circle12 sk-child'></div>
+            </div>
+        );
     }
 }
 

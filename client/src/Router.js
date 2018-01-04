@@ -108,8 +108,6 @@ class Routes extends Component {
                         
                         <Switch>
                             <Route exact path='/' component={Posts}/>
-                            <Route path='/submitLink' component={SubmitLinkPost} />
-                            <Route path='/submitText' component={SubmitTextPost} />
                             <Route exact path='/profile/:username' render={(props) => (
                                 this.state.user ? (
                                 <Profile user={this.state.user} {...props} />
@@ -117,6 +115,8 @@ class Routes extends Component {
                                 <Redirect to='/'/>
                                 )
                             )}/>
+                            <Route path='/submitLink' component={SubmitLinkPost} />
+                            <Route path='/submitText' component={SubmitTextPost} />
                             <Route exact path={`/:title/:shortId`} render={(props) => (
                                 this.state.user ? (
                                 <ViewPost user={this.state.user} {...props} />

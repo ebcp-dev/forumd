@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import './Comments.css';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+
+import './Comments.css';
+import Utility from '../../../Utility';
 
 class SubmitComment extends Component {
     constructor(props) {
@@ -30,10 +33,8 @@ class SubmitComment extends Component {
         });
     }
 
-    handleChange(e) {
-        const values = this.state;
-        values[e.target.name] = e.target.value;
-        this.setState(values);
+    handleChange(value) {
+        this.setState({ text: value });
     }
 
     render () {
@@ -49,15 +50,15 @@ class SubmitComment extends Component {
                 </p>
                 <form onSubmit={this.submitFormOnClick}>
                     <div className='collapse' id='submitCommentForm'>
-                        <div className=''>
+                        <div className='submit-text-form'>
                             <div className='md-form'>
-                                <input type='text' id='text-form' 
-                                className='form-control' name='text'
-                                value={text} onChange={this.handleChange}/>
-                                <label htmlFor='text-form'>Comment</label>
+                                <ReactQuill className='text-form' 
+                                value={text} modules={Utility.toolbar} 
+                                onChange={this.handleChange}/>
                             </div>
+                            <br />
                             <div className='flex-row'>
-                                <button type='submit' className='btn btn-elegant'>Submit</button>
+                                <button type='submit' className='btn btn-elegant btn-sm'>Submit</button>
                             </div>
                         </div>
                     </div>

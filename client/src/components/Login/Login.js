@@ -61,7 +61,7 @@ class Login extends Component {
                                     <label htmlFor='loginUsername'>Username</label>
                                 </div>
                                 <div className='md-form'>
-                                    <input type='text' id='password' 
+                                    <input type='password' id='password' 
                                     className='form-control' name='password'
                                     value={password} onChange={this.handleChange}/>
                                     <label htmlFor='password'>Password</label>

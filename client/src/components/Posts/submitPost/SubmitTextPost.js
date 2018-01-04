@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 
 import './SubmitPost.css';
+import Utility from '../../../Utility';
 
 class SubmitTextPost extends Component {
     constructor(props) {
@@ -83,9 +84,8 @@ class SubmitTextPost extends Component {
                             </div>
                             <div className='submit-text-form'>
                                 <ReactQuill className='text-form' value={text} 
-                                theme='snow' onChange={this.handleChange} />
+                                theme='snow' modules={Utility.toolbar} onChange={this.handleChange} />
                             </div>
-                            {console.log()}
                             <hr />
                             <div className="flex-row">
                                 <button type="submit" className="btn btn-elegant">Submit</button>

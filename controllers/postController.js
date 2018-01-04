@@ -104,6 +104,37 @@ postController.submitNewPost = (req, res) => {
     });
 };
 
+// Edit existing post
+postController.editPost = (req, res) => {
+    const { text, shortId } = req.body;
+    const userId = req.user._id;
+
+    models.Post.findOneAndUpdate(
+        { 
+            shortId,
+            _author: userId 
+        },
+        {
+            $set: {
+                text: text
+            }
+        }
+    ).then((edited) => {
+        console.log(edited);
+        return res.status(200).json({
+            success: true,
+            data: edited,
+            message: 'Post edited.'
+        });
+    }).catch((error) => {
+        return res.status(200).json({
+            success: true,
+            data: error,
+            message: 'Edit failed.'
+        });
+    });
+};
+
 // Sets posts to isDeleted: true only if
 // user.id matches that of post's _author field
 postController.deletePost = (req, res) => {

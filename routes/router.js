@@ -36,6 +36,7 @@ router.get('/post/:postTitle/:shortId', postController.getPost);
 router.get('/allPosts', postController.getAll);
 router.get('/allUserPosts', ensureAuthenticated, postController.getAllUserPosts);
 router.post('/submitPost', ensureAuthenticated, postController.submitNewPost);
+router.post('/editPost', ensureAuthenticated, postController.editPost);
 router.post('/deletePost', ensureAuthenticated, postController.deletePost);
 
 // Comments routes

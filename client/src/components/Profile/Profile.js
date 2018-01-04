@@ -146,11 +146,11 @@ class Profile extends Component {
                             href='#pills-posts' role='tab' aria-controls='pills-posts' 
                             aria-selected='false'>Posts</a>
                         </li>
-                        <li className='nav-item'>
+                        {/* <li className='nav-item'>
                             <a className='nav-link' id='pills-bookmarks-tab' data-toggle='pill' 
                             href='#pills-bookmarks' role='tab' aria-controls='pills-bookmarks' 
                             aria-selected='false'>Bookmarks</a>
-                        </li>
+                        </li> */}
                     </ul>
                     <div className='container'>
                         <div className='tab-content' id='v-pills-tabContent'>
@@ -158,8 +158,8 @@ class Profile extends Component {
                             aria-labelledby='pills-comments-tab'><UserComments /></div>
                             <div className='tab-pane fade' id='pills-posts' role='tabpanel' 
                             aria-labelledby='pills-posts-tab'><UserPosts /></div>
-                            <div className='tab-pane fade' id='pills-bookmarks' role='tabpanel' 
-                            aria-labelledby='pills-bookmarks-tab'>bookmarks</div>
+                            {/* <div className='tab-pane fade' id='pills-bookmarks' role='tabpanel' 
+                            aria-labelledby='pills-bookmarks-tab'>bookmarks</div> */}
                         </div>
                     </div>
                 </div>

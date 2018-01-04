@@ -61,19 +61,22 @@ class UserComments extends Component {
                     &nbsp; {sort}
                 </button>
                 <hr />
+                <ul className='list-group'>
                 {pageOfItems.map(comment => {
                     if (!comment.isDeleted) {
                         return (
-                            <div key={comment.shortId}>
-                                <p><a href={comment.postLink}>
-                                    <strong>{comment.text}</strong> - {Utility.parseDate(comment.createdAt).elapsed}
-                                </a></p>
-                            </div>
+                            <li key={comment.shortId} className='list-group-item' >
+                                <a href={comment.postLink}>
+                                <strong dangerouslySetInnerHTML={{__html: comment.text}}></strong>
+                                 - {Utility.parseDate(comment.createdAt).elapsed}
+                                </a>
+                            </li>
                         );
                     } else {
                         return null;
                     }
                 })}
+                </ul>
                 <Pagination items={comments} onChangePage={this.onChangePage} />
             </div>
         );

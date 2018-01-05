@@ -1,4 +1,4 @@
-# forumd
+# FORUM'd
 Online forum created with the MERN stack.
 
 FORUM'd allows users to register accounts that they can use to make posts, comment on posts, edit posts, delete posts, and delete posts.

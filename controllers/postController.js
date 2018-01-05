@@ -91,7 +91,7 @@ postController.submitNewPost = (req, res) => {
     });
 
     newPost.save().then((result) => {
-        console.log(result);
+        //console.log(result);
         return res.status(200).json({
             success: true,
             data: result
@@ -120,7 +120,7 @@ postController.editPost = (req, res) => {
             }
         }
     ).then((edited) => {
-        console.log(edited);
+        //console.log(edited);
         return res.status(200).json({
             success: true,
             data: edited,

@@ -44,7 +44,7 @@ class SubmitTextPost extends Component {
                     window.location.reload();
             }
         }).catch(error => {
-            console.log(error.response);
+            console.log(error.response.data.message);
             this.setState({ success: true, response: error.response.message });
         });
     }

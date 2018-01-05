@@ -93,11 +93,11 @@ class Posts extends Component {
                                     ? <p className='card-text'>by {post._author.username}</p>
                                     : <p className='card-text'>by deleted</p>
                                     }
-                                    <p className='card-text'>
+                                    {/* <p className='card-text'>
                                         {Utility.parseDate(post.createdAt).month}
                                         /{Utility.parseDate(post.createdAt).date}
                                         /{Utility.parseDate(post.createdAt).year}
-                                    </p>
+                                    </p> */}
                                     <p className='card-text'>
                                         {Utility.parseDate(post.createdAt).elapsed}
                                     </p>

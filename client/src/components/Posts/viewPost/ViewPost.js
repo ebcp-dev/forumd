@@ -37,7 +37,7 @@ class ViewPost extends Component {
             });
         }).catch(error => {
             return this.setState({
-                post: false
+                post: {}
             });
         });
     }
@@ -74,7 +74,7 @@ class ViewPost extends Component {
     }
 
     render() {
-        //console.log(this.state);
+        console.log(this.state);
         if (this.state.post && this.state.post !== 'deleted') {
             const { post, comments, sort } = this.state;
             return (
@@ -159,25 +159,26 @@ class ViewPost extends Component {
                     </div>
                 </div>
             );
-        } else if (!this.state.post && this.state.post === 'deleted') {
-            return (
-                <Redirect to='/' />
-            );
         }
         return (
-            <div className='sk-circle'>
-                <div className='sk-circle1 sk-child'></div>
-                <div className='sk-circle2 sk-child'></div>
-                <div className='sk-circle3 sk-child'></div>
-                <div className='sk-circle4 sk-child'></div>
-                <div className='sk-circle5 sk-child'></div>
-                <div className='sk-circle6 sk-child'></div>
-                <div className='sk-circle7 sk-child'></div>
-                <div className='sk-circle8 sk-child'></div>
-                <div className='sk-circle9 sk-child'></div>
-                <div className='sk-circle10 sk-child'></div>
-                <div className='sk-circle11 sk-child'></div>
-                <div className='sk-circle12 sk-child'></div>
+            <div>
+                <div className='sk-circle'>
+                    <div className='sk-circle1 sk-child'></div>
+                    <div className='sk-circle2 sk-child'></div>
+                    <div className='sk-circle3 sk-child'></div>
+                    <div className='sk-circle4 sk-child'></div>
+                    <div className='sk-circle5 sk-child'></div>
+                    <div className='sk-circle6 sk-child'></div>
+                    <div className='sk-circle7 sk-child'></div>
+                    <div className='sk-circle8 sk-child'></div>
+                    <div className='sk-circle9 sk-child'></div>
+                    <div className='sk-circle10 sk-child'></div>
+                    <div className='sk-circle11 sk-child'></div>
+                    <div className='sk-circle12 sk-child'></div>
+                </div>
+                {this.state.post === 'deleted' && (
+                    <Redirect to='/' />
+                )}
             </div>
         );
     }

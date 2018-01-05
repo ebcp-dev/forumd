@@ -23,7 +23,7 @@ class UserComments extends Component {
 
     getComments() {
         axios.get('/api/allUserComments').then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({
                 comments: response.data.data.reverse(),
                 sort: 'New'
@@ -52,7 +52,7 @@ class UserComments extends Component {
     }
 
     render() {
-        console.log(this.state)
+        //console.log(this.state);
         const { comments, sort, pageOfItems } = this.state;
         return (
             <div>

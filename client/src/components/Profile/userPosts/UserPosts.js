@@ -23,7 +23,7 @@ class UserPosts extends Component {
 
     getPosts() {
         axios.get('/api/allUserPosts').then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({
                 posts: response.data.data.reverse(),
                 sort: 'New'
@@ -52,7 +52,7 @@ class UserPosts extends Component {
     }
 
     render() {
-        console.log(this.state)
+        //console.log(this.state);
         const { posts, sort, pageOfItems } = this.state;
         return (
             <div>

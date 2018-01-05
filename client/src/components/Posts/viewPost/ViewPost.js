@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import './ViewPost.css';
@@ -37,7 +36,10 @@ class ViewPost extends Component {
             });
         }).catch(error => {
             return this.setState({
-                post: {}
+                post: {
+                    title: 'Post doesn\'t exist anymore.',
+                    text: 'The author may have deleted the post.'
+                }
             });
         });
     }
@@ -47,7 +49,10 @@ class ViewPost extends Component {
         const { shortId } = this.state.post;
         axios.post('/api/deletePost', { shortId }).then(response => {
             return this.setState({
-                post: 'deleted'
+                post: {
+                    title: 'Post has been deleted.',
+                    text: 'You have deleted this post.'
+                }
             });
         }).catch(error => {
             console.log(error);
@@ -176,9 +181,6 @@ class ViewPost extends Component {
                     <div className='sk-circle11 sk-child'></div>
                     <div className='sk-circle12 sk-child'></div>
                 </div>
-                {this.state.post === 'deleted' && (
-                    <Redirect to='/' />
-                )}
             </div>
         );
     }

@@ -50,14 +50,14 @@ const populateAuthor = function(next) {
     next();
 };
 // Show post reference when queried
-/* CAUSES INFINITE LOOP WHEN Post ALSO POPULATES COMMENTS
-const populatePost = function(next) {
-    this.populate({
-        path: '_post',
-        select: 'title createdAt -_id'
-    });
-    next();
-};*/
+// CAUSES INFINITE LOOP WHEN Post ALSO POPULATES COMMENTS
+// const populatePost = function(next) {
+//     this.populate({
+//         path: '_post',
+//         select: 'title createdAt -_id'
+//     });
+//     next();
+// };
 // Execute populate methods before find query
 commentSchema.pre('find', populateAuthor);
 commentSchema.pre('findOne', populateAuthor);

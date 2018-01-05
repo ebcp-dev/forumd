@@ -103,7 +103,7 @@ class Posts extends Component {
                                     </p>
                                     <Link to={`/${post.title}/${post.shortId}`}>
                                         <i className='fa fa-comments-o' aria-hidden='true'></i>
-                                        &nbsp;{post._comments.length}
+                                        &nbsp;{post._comments.filter(comment => !comment.isDeleted).length}
                                     </Link>
                                 </div>
                             </div>

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express();
-const path = require('path');
 
 // Import controllers
 const userController = require('./../controllers/userController');
@@ -20,11 +19,6 @@ ensureAuthenticated = (req, res, next) => {
         });
     }
 };
-
-// Handles every other api request by routing request to index.html
-router.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
-});
 
 // User routes
 router.get('/user', ensureAuthenticated, userController.get);

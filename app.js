@@ -50,4 +50,9 @@ app.use((req, res, next) => {
 // Use routes
 app.use('/api', router);
 
+// Handles every other api request by routing request to index.html
+router.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+});
+
 module.exports = app;

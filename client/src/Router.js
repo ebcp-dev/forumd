@@ -124,7 +124,7 @@ class Routes extends Component {
                                 <ViewPost {...props}/>
                                 )
                             )}/>
-                            <Route component={NotFound} />
+                            <Route path='*' component={NotFound} />
                         </Switch>
                     </div>
                 </div>
